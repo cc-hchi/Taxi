@@ -2,10 +2,7 @@ import os
 import shutil
 from datetime import datetime
 
-import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn
 
 columns = ['company', 'id', 'card', 'timestamp', 'longitude', 'latitude', 'unknown1', 'status', 'unknown3',
            'direction', 'unknown5']  # 文件中每一列所对应的信息
@@ -140,15 +137,26 @@ def dropped_unchange():
         df.to_csv('./data/ultimate/' + file, header=False, index=False)
 
 
-def plot_all(df, new_columns):
-    """
-    画出指定的DataFrame的指定列的图形矩阵，存入'./img/当中'
-    :param df: 传入的DataFrame
-    :param new_columns: 想要画的列组成的列表
-    """
-    df = df.iloc[:, [columns.index(x) for x in new_columns]]
-    # print(df.head())
-    plt.show()
+def basic_describe():
+    for date in os.listdir('./data/ultimate'):
+        df = read_data('./data/ultimate/' + date)
+        grouped = df.groupby(df['card'])
+        count = 0
+        for _, __ in grouped:
+            count = count + 1
+        print(date.split('.')[0], count, df.shape)
+
+
+basic_describe()
+# def plot_all(df, new_columns):
+#     """
+#     画出指定的DataFrame的指定列的图形矩阵，存入'./img/当中'
+#     :param df: 传入的DataFrame
+#     :param new_columns: 想要画的列组成的列表
+#     """
+#     df = df.iloc[:, [columns.index(x) for x in new_columns]]
+#     # print(df.head())
+#     plt.show()
 
 
 # merge_data()
@@ -175,4 +183,4 @@ def plot_all(df, new_columns):
 # plt.xticks(pd.date_range(start='20170703', end='20170704', freq='h'))
 # plt.show()
 
-dropped_unchange()
+# dropped_unchange()
