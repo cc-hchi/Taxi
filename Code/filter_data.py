@@ -3,6 +3,7 @@ import shutil
 from datetime import datetime
 
 import pandas as pd
+import matplotlib.pyplot as plt
 
 columns = ['company', 'id', 'card', 'timestamp', 'longitude', 'latitude', 'unknown1', 'status', 'unknown3',
            'direction', 'unknown5']  # 文件中每一列所对应的信息
@@ -117,18 +118,18 @@ def dropped_unchange():
     if os.path.exists('./data/ultimate'):
         shutil.rmtree('./data/ultimate')
     os.mkdir('./data/ultimate')
-    for file in os.listdir('./data/after2Haidian')[:-1]:
+    for file in os.listdir('./data/after')[:-1]:
         dropped_card = []
-        df = pd.read_csv('./data/after2Haidian/' + file, header=None, names=columns)
+        df = pd.read_csv('./data/after/' + file, header=None, names=columns)
         # print(df['status'].groupby(df['card']).count())
         for card, series in df['status'].groupby(df['card']):
             # print(card, series)
             series = series.drop_duplicates()
-            if(series.__len__() == 1):
+            if len(series) == 1:
                 dropped_card.append(card)
         for card, sub_df in df.loc[:, ['longitude', 'latitude']].groupby(df['card']):
             sub_df = sub_df.drop_duplicates()
-            if(sub_df.index.__len__() == 1):
+            if len(sub_df.index) == 1:
                 dropped_card.append(card)
         dropped_card = set(dropped_card)
         dropped_df = df[df['card'].apply(lambda x: x in dropped_card)]
@@ -147,7 +148,9 @@ def basic_describe():
         print(date.split('.')[0], count, df.shape)
 
 
-basic_describe()
+# basic_describe()
+
+
 # def plot_all(df, new_columns):
 #     """
 #     画出指定的DataFrame的指定列的图形矩阵，存入'./img/当中'
@@ -157,7 +160,6 @@ basic_describe()
 #     df = df.iloc[:, [columns.index(x) for x in new_columns]]
 #     # print(df.head())
 #     plt.show()
-
 
 # merge_data()
 

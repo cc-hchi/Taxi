@@ -1,7 +1,5 @@
 import numpy as np
 import pandas as pd
-import csv
-import matplotlib.pyplot as plt
 
 data = pd.read_csv(r'D:\微信\微信下载\WeChat Files\a13804425960\FileStorage\File\2019-08\ultimate\20170703.csv',header = None )
 data = data.sort_values(by=[3] )
