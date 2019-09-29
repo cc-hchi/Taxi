@@ -57,20 +57,28 @@ def plot_on():
     画出每天的上车次数频率随时间的变化图
     :return:
     '''
-    df = pd.DataFrame([])
+    df = pd.DataFrame([], index=pd.timedelta_range('00:00:00', periods=24, freq='1h'))
     for date in os.listdir('./data/每小时上下车次数统计/'):
-        sub_df = pd.read_csv('./data/每小时上下车次数统计/' + date)['on']
-        sub_series = pd.Series(sub_df.values, index=pd.timedelta_range('00:00:00', periods=24, freq='1h'))
+        sub_df = pd.read_csv('./data/每小时上下车次数统计/' + date)
+        # sub_series = pd.Series(sub_df.values,
+        #                        index=pd.timedelta_range('00:00:00', periods=24, freq='1h'))
         # sub_df = sub_df.reindex(pd.timedelta_range('00:00:00', periods=24, freq='1h'))
-        df[date.split('.')[0]] = sub_series
+        df[date.split('.')[0]] = sub_df['on'].values
         # print(sub_df)
-    # print(df)
     df.plot()
-    plt.xlabel('time')
-    plt.ylabel('times of taking on')
     plt.grid(True)
-    plt.title('一天当中的上车次数')
-    plt.xticks(df.index)
+    plt.title('Frequency of Taking on among a day')
+    plt.xlabel('Time')
+    plt.ylabel('Frequency')
+    times = [str(i)+'~'+str(i+1) for i in range(24)]
+    plt.xticks([9e13/24*i for i in range(24)], times, rotation=90)
+    # print([str(i) for i in df.index])
+    # print(df)
+    # fig1 = plt.figure()
+    # ax = fig1.add_subplot(1, 1, 1)
+    # print(df.index)
+    # print(plt.xticks())
+
 
 # num_on_off_day()
 # num_on_off_hours()
