@@ -156,10 +156,22 @@ def empty_describe():
             # print(sum_time)
             res_df[date.split('.')[0]][hour] = empty / (empty+no_empty)
     # print(res_df)
-    res_df.to_csv('./data/各时段空驶率统计.csv')
+    res_df.to_csv('./data/各时段空驶率统计.csv', index=False)
+
+
+def plot_empty():
+    df = pd.read_csv('./data/各时段空驶率统计.csv')
+    df.plot()
+    plt.grid(True)
+    plt.title('Empty ratio among a day')
+    plt.xlabel('Time')
+    plt.ylabel('Empty ratio')
+    plt.xticks(df.index, [str(i)+'~'+str(i+1) for i in range(24)], rotation=90)
+
 
 # num_on_off_day()
 # num_on_off_hours()
 # plot_on()
 # plot_off()
-empty_describe()
+# empty_describe()
+plot_empty()
